@@ -10,3 +10,5 @@ Once the documents collected, we filter them depending on a score threshold, som
 I made some tools that allow the bot to also read the content from Google Docs and Google Sites, feel free to make new tools that would allow it to read other types ! (pdf and txt files for exampel !)
 
 The LLM that answers is for now Mixtral, as I did not have a powerfull computer to run an LLM good enough, I'm using a free API from hugging face, you can insert your own access token !!
+
+You can fork the project and work on ur own, make pull requests, or just tell me the idea and I will work on it !
