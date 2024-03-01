@@ -229,7 +229,7 @@ async def on_message(message: discord.Message):
                 asking = True
             counter+=1
 
-        docs = ' | '.join(list(set([f.split("()")[0] for f in feed])))
+        docs = ' | '.join(list(set(["#"+f.split("()")[0] for f in feed])))
 
         await m.edit(content=ans.replace("</s>", "")+f"\n`{docs}`")
         await m.reply(content=message.author.mention)
