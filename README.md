@@ -19,6 +19,6 @@ If first require an Access Token from HuggingFace.
 For that you create an account -> Settings -> Access Tokens. 
 If you want to test it on your own, you need to create a discord bot on the [discord's developers portal](https://discord.com/developers/applications). 
 Then you create a new application and bot. (Do not forget to toggle all intents !!) 
-Once it's done, you can invite the bot to ur discord server:
+Once it's done, you can invite the bot to ur discord server: 
 `https://discord.com/api/oauth2/authorize?client_id={bot_id}&permissions=0&scope=bot%20applications.commands` 
 To run the code, you can just open the project on VSCode (or another IDE) and run bot.py, then you insert the Access token from Hugging Face and the Bot Token available on the developers portal.
