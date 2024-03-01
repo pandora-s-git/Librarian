@@ -15,7 +15,7 @@ The LLM that answers is for now Mixtral, as I did not have a powerfull computer 
 You can fork the project and work on ur own, make branches, make pull requests, or just tell me the idea and I will work on it !
 
 ## How to use
-If first require an Access Token from HuggingFace.  
+You first require an Access Token from HuggingFace.  
 For that you create an account -> Settings -> Access Tokens.  
 If you want to test it on your own, you need to create a discord bot on the [discord's developers portal](https://discord.com/developers/applications).  
 Then you create a new application and bot. (Do not forget to toggle all intents !!)  
