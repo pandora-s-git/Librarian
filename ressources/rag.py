@@ -2,9 +2,9 @@ print("[ RAG ] Loading RAG requirements...")
 
 import os
 from tqdm import tqdm
-from vdb import VDB
-from sum import SUM
-from llm import LLM
+from ressources.vdb import VDB
+from ressources.sum import SUM
+from ressources.llm import LLM
 
 class RAG():
     def __init__(self, library: str, context_c_size: int = 10000):

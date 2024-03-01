@@ -1,4 +1,5 @@
-#https://discord.com/api/oauth2/authorize?client_id=1210697340348928101&permissions=0&scope=bot%20applications.commands
+bot_id = "UR BOT ID HERE TO CREATE AN INVITATION IF U DONT KNOW HOW"
+print("Bot Invite URL:",f"https://discord.com/api/oauth2/authorize?client_id={bot_id}&permissions=0&scope=bot%20applications.commands")
 
 import asyncio
 import os
