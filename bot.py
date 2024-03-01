@@ -6,8 +6,10 @@ import os
 import discord
 from discord.ext import commands
 from discord.ext.commands import has_permissions
-from ressources.read_google_docs import replace_google_docs_url_with_content
-from ressources.read_google_sites import replace_google_sites_url_with_content
+from tools.read_google_docs import replace_google_docs_url_with_content
+from tools.read_google_sites import replace_google_sites_url_with_content
+from tools.read_pdf import read_attach_pdf
+from tools.read_txt import read_attach_txt
 from ressources.rag import RAG
 
 BOT_TOKEN = ""
@@ -28,7 +30,9 @@ intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=prefix, intents=intents)
 tree = bot.tree
 
-rag = RAG("Library", 4000)
+rag_lib = "../Library"
+
+rag = RAG(rag_lib, 4000)
 
 @bot.event
 async def on_ready():
@@ -55,6 +59,8 @@ async def load(ctx):
         return
     async with ctx.channel.typing():
         m = await ctx.reply("```Reading data available...```")
+        if not os.path.exists("../temp"):
+            os.makedirs("../temp")
         await asyncio.sleep(1)
 
         info_channels_ids = info_channels
@@ -89,16 +95,33 @@ async def load(ctx):
                                         content += "\n"+title+"\n"+desc+"\n"
                                     except Exception:
                                         pass
-                                raw_content_google, status = replace_google_docs_url_with_content(content)
+
+                                content, status = replace_google_docs_url_with_content(content)
                                 if status:
                                     await m.edit(content=f"```Reading data available...\n - {progression_bar_read}\n - Google Document detected in #{channel.name}_{thread.name} and parsed...```")
                                     await asyncio.sleep(1)
-                                raw_content_google, status = replace_google_sites_url_with_content(raw_content_google)
+                                content, status = replace_google_sites_url_with_content(content)
                                 if status:
                                     await m.edit(content=f"```Reading data available...\n - {progression_bar_read}\n - Google Site detected in #{channel.name}_{thread.name} and parsed...```")
                                     await asyncio.sleep(0.2)
+                                
+                                for attach in c.attachments:
+                                    if attach.content_type == "application/pdf":
+                                        await attach.save("../temp/"+attach.filename)
+                                        attach_content = read_attach_pdf("../temp/"+attach.filename)
+                                        if attach_content:
+                                            await m.edit(content=f"```Reading data available...\n - {progression_bar_read}\n - PDF File detected in #{channel.name}_{thread.name} and parsed...```")
+                                            await asyncio.sleep(0.2)
+                                            content += f"\n{attach.filename}\n"+attach_content
+                                    if attach.content_type == "text/plain; charset=utf-8":
+                                        await attach.save("../temp/"+attach.filename)
+                                        attach_content = read_attach_txt("../temp/"+attach.filename)
+                                        if attach_content:
+                                            await m.edit(content=f"```Reading data available...\n - {progression_bar_read}\n - TXT File detected in #{channel.name}_{thread.name} and parsed...```")
+                                            await asyncio.sleep(0.2)
+                                            content += f"\n{attach.filename}\n"+attach_content
 
-                                txt += raw_content_google+"\n"
+                                txt += content+"\n"
                             if len(txt) < 10:
                                 await m.edit(content=f"```Reading data available...\n - {progression_bar_read}\n - Empty, #{channel.name}_{thread.name} ignored.```")
                             else:
@@ -118,15 +141,32 @@ async def load(ctx):
                                 except Exception:
                                     desc = ""
                                 content += "\n"+title+"\n"+desc+"\n"
-                            raw_content_google, status = replace_google_docs_url_with_content(content)
+                            content, status = replace_google_docs_url_with_content(content)
                             if status:
                                 await m.edit(content=f"```Reading data available...\n - {progression_bar_read}\n - Google Document detected in #{channel.name} and parsed...```")
                                 await asyncio.sleep(0.2)
-                            raw_content_google, status = replace_google_sites_url_with_content(raw_content_google)
+                            content, status = replace_google_sites_url_with_content(content)
                             if status:
-                                await m.edit(content=f"```Reading data available...\n - {progression_bar_read}\n - Google Site detected in #{channel.name}_{thread.name} and parsed...```")
+                                await m.edit(content=f"```Reading data available...\n - {progression_bar_read}\n - Google Site detected in #{channel.name} and parsed...```")
                                 await asyncio.sleep(0.2)
-                            txt += raw_content_google+"\n"
+
+                            for attach in c.attachments:
+                                if attach.content_type == "application/pdf":
+                                    await attach.save("../temp/"+attach.filename)
+                                    attach_content = read_attach_pdf("../temp/"+attach.filename)
+                                    if attach_content:
+                                        await m.edit(content=f"```Reading data available...\n - {progression_bar_read}\n - PDF File detected in #{channel.name} and parsed...```")
+                                        await asyncio.sleep(0.2)
+                                        content += f"\n{attach.filename}\n"+attach_content
+                                if attach.content_type == "text/plain; charset=utf-8":
+                                    await attach.save("../temp/"+attach.filename)
+                                    attach_content = read_attach_txt("../temp/"+attach.filename)
+                                    if attach_content:
+                                        await m.edit(content=f"```Reading data available...\n - {progression_bar_read}\n - TXT File detected in #{channel.name} and parsed...```")
+                                        await asyncio.sleep(0.2)
+                                        content += f"\n{attach.filename}\n"+attach_content
+
+                            txt += content+"\n"
                         if len(txt) < 1:
                             await m.edit(content=f"```Reading data available...\n - {progression_bar_read}\n - Empty, #{channel.name} ignored.```")
                         else:
@@ -135,16 +175,17 @@ async def load(ctx):
                     await asyncio.sleep(0.2)
 
         await m.edit(content=f"```Reading data available...\n - {progression_bar_read}\n - Saving...```")
-        if not os.path.exists("Library"):
-            os.makedirs("Library")
+        if not os.path.exists(rag_lib):
+            os.makedirs(rag_lib)
         for d in data:
-            with open("Library/"+d[0]+".txt", "w", encoding="utf-8") as f:
+            with open(rag_lib+"/"+d[0]+".txt", "w", encoding="utf-8") as f:
                 f.write(d[1])
 
         counter = 0
         pro = ["|","/","-","\\"]
         await m.edit(content=f"```Reading data available.\n - Finished.```")
 
+        await m.edit(content=f"```Reading data available.\n - Finished.\nPre-Vectorization...\n```")
         async for _ in rag.load():
             await m.edit(content=f"```Reading data available.\n - Finished.\nPre-Vectorization...\n  {pro[counter%len(pro)]}\n```")
             counter+=1
@@ -163,10 +204,13 @@ async def on_message(message: discord.Message):
         if qa_channel_id == None:
             m = await message.reply("```First set at least the QA Channel.```")
             return
+        if not os.path.exists(rag_lib):
+            m = await message.reply("```Load at least once.```")
+            return
 
         question = message.clean_content.replace("@"+bot.user.display_name, "")
 
-        m =await message.reply(content=f"```Fragmentation and preliminary vector scanning...```")
+        m =await message.reply(content=f"```Fragmentation and preliminary vector scanning and computation...```")
         counter = 0
         pro = ["|","/","-","\\"]
 
@@ -175,12 +219,12 @@ async def on_message(message: discord.Message):
         async for feed in rag.ask(question, 6):
             if asking:
                 if counter%10 == 0:
-                    await m.edit(content=ans+f"\n`{pro[counter%len(pro)]}`")
+                    await m.edit(content=ans+f"\n`{pro[(counter//10)%len(pro)]}`")
                 if type(feed) == list:
                     break
                 ans += feed
             else:
-                await m.edit(content=f"```Fragmentation and preliminary vector scanning...\n  {pro[counter%len(pro)]}\n```")
+                await m.edit(content=f"```Fragmentation and preliminary vector scanning and computation...\n  {pro[counter%len(pro)]}\n\n -> Note: This might take a while if it's the first time querying a new document.\n```")
             if feed == "<|asking|>":
                 asking = True
             counter+=1
