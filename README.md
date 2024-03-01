@@ -1,5 +1,5 @@
 # Librarian
-Originally a personal project, I would like everyone to have fun and contribute to this small idea. 
+Originally a personal project, I would like everyone to have fun and contribute to this small idea.  
 The goal is simple, make a Discord Bot that has access to all files and information inside a discord server and answer the users questions.
 
 ## Explanations
