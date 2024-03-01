@@ -127,7 +127,7 @@ async def load(ctx):
                                 await m.edit(content=f"```Reading data available...\n - {progression_bar_read}\n - Google Site detected in #{channel.name}_{thread.name} and parsed...```")
                                 await asyncio.sleep(0.2)
                             txt += raw_content_google+"\n"
-                        if len(txt) < 10:
+                        if len(txt) < 1:
                             await m.edit(content=f"```Reading data available...\n - {progression_bar_read}\n - Empty, #{channel.name} ignored.```")
                         else:
                             data.append((str(channel.name).replace('"',""), txt))
