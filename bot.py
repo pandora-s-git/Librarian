@@ -10,8 +10,12 @@ from ressources.read_google_docs import replace_google_docs_url_with_content
 from ressources.read_google_sites import replace_google_sites_url_with_content
 from ressources.rag import RAG
 
-with open("KEYS/BOT_TOKEN.txt", "r", encoding="utf-8") as f:
-    BOT_TOKEN = f.read()
+BOT_TOKEN = ""
+try: ## In case you want to save the tokens somewhere outside the repo, same for llm.py
+    with open("../KEYS/BOT_TOKEN.txt", "r", encoding="utf-8") as f:
+        BOT_TOKEN = f.read()
+except Exception as e:
+    print(e)
 if not BOT_TOKEN:
     BOT_TOKEN = input("Insert your Bot Token here:\n > ")
 

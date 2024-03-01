@@ -2,8 +2,12 @@ print("[ LLM ] Loading LLM requirements...")
 
 from huggingface_hub import InferenceClient
 
-with open("KEYS/HF_TOKEN.txt", "r",encoding="utf-8") as f:
-    HF_TOKEN = f.read()
+HF_TOKEN = ""
+try: ## In case you want to save the tokens somewhere outside the repo, same for bot.py
+    with open("../KEYS/HF_TOKEN.txt", "r",encoding="utf-8") as f:
+        HF_TOKEN = f.read()
+except Exception as e:
+    print(e)
 if not HF_TOKEN:
     HF_TOKEN = input("Insert your HuggingFace Token here:\n > ")
 
@@ -35,4 +39,5 @@ class LLM():
 ###                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ###     TypeError: TextGenerationStreamResponse.__init__() got an unexpected keyword argument 'index'
 ###   
-### Ended up adding "del json_payload["index"]" just before the error in the _common.py file, it works... it's not an advised fix tho, just something I found after tweaking
+### Temp Fix With:
+###     Adding "del json_payload["index"]" just before the error in the _common.py file, it works... it's not an advised fix tho, just something I found after tweaking
