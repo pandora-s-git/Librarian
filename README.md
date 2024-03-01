@@ -22,3 +22,7 @@ Then you create a new application and bot. (Do not forget to toggle all intents 
 Once it's done, you can invite the bot to ur discord server:  
 `https://discord.com/api/oauth2/authorize?client_id={bot_id}&permissions=0&scope=bot%20applications.commands`  
 To run the code, you can just open the project on VSCode (or another IDE) and run bot.py, then you insert the Access token from Hugging Face and the Bot Token available on the developers portal.
+
+## A small Demo of what it can do
+It was provided with a PDF file about KG and LLMs among other channels with different documents.  
+![alt text](demo.PNG)
