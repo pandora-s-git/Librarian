@@ -51,12 +51,12 @@ class VDB():
 
                             with open(library+"/"+file, "r", encoding="utf-8") as f:
                                 updated_vector_database.append({"document":file, "date": date,"vector":self.generate_embedding(f.read())})
+                            yield file
                         else:
 
                             print("[ VDB ] Document to date.")
 
                             updated_vector_database.append({"document":d["document"], "date": d["date"],"vector":d["vector"]})
-                        yield file
                         break
             if not cached:
                  
