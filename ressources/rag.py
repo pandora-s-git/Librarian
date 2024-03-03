@@ -13,7 +13,7 @@ class RAG():
         print("[ RAG ] Loading RAG...")
 
         self.vdb = VDB()
-        self.sum = SUM()
+        self.sum = SUM(lang=lang)
         if lang == "en":
             self.llm = LLM("<s>[INST] Here is a list of documents to use to answer a question:\n{}\nUsing these documents, answer the following question clearly and briefly, a summary. Question you need to answer:\n{} [/INST] {}")
             self.pre = "Here is the answer:\n"

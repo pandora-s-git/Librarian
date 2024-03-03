@@ -1,6 +1,3 @@
-bot_id = "[UR BOT ID HERE TO CREATE AN INVITATION IF U DONT KNOW HOW]"
-print("Bot Invite URL:",f"https://discord.com/api/oauth2/authorize?client_id={bot_id}&permissions=0&scope=bot%20applications.commands")
-
 import asyncio
 import os
 import discord
@@ -24,21 +21,24 @@ if not BOT_TOKEN:
 qa_channel_id = None
 info_channels = []
 
-prefix = "tot!"
+prefix = "lib!"
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=prefix, intents=intents)
+
 tree = bot.tree
 
 rag_lib = "../Library"
 
-lang = "fr"
+lang = "en"
 
 rag = RAG(rag_lib, 4000, lang)
 
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name}.')
+    bot_id = bot.user.id
+    print("Bot Invite URL:",f"https://discord.com/api/oauth2/authorize?client_id={bot_id}&permissions=0&scope=bot%20applications.commands")
 
 @bot.command()
 async def ping(ctx):
