@@ -43,5 +43,29 @@ The second time it required the same document, it answered in less than a minute
 It was provided with a PDF file about KG and LLMs among other channels with different documents.  
 ![alt text](demo.PNG)
 
-# How it works
-*comming soon with details*
+## How it works
+### Loading
+When we load two things happen:  
+ - First, it will read and use the tools it has to save all text it finds !!  
+ - Then, it will use the embedding model to get the vectors of all documents and save them.  
+
+### Querying
+Then it's the important part.  
+When we ask it something it will first rank all documents with their own score depending on the question and the vectors with the embedding model.  
+Among them, it will select a few, the best ones.  
+There are two scenarios here:  
+ - If the score is good it will keep the document.  
+ - If not it will ignore it.
+
+Then we need to query the documents themselves... this is where stuff gets tricky.  
+We have to cut all documents into sections, to only get the parts that are interesting. Because we do not want to feed to the LLM an entire research paper of 30 pages...  
+So, once again, we do the same as previous. However, because of the huge amount of sections we might get depending of the size of the documents, this might take a while... but it will save it on a file as cache, to speed up the process next time.  
+Once done, we have three main scenarios:  
+ - The score is really good, so we keep the entire section.  
+ - The score is good but not good enough, so we will summarize it ! (This takes a bit more time...)  
+ - The score is bad, we ignore the section.
+
+And there you go ! You have the sections of each document that matters ! At least in theory...  
+Next and last step: We feed the LLM the sections followed by the question and we wait for an answer !
+
+## Thank you !
