@@ -33,7 +33,11 @@ You can now ask it anything !
 
 ### Notes
 It will always take longer if it's the first time querying a document, modified document, or if there was a recent loading. After that, it will keep it on a cache for an exponentially quick access if the same document is requested a next time.  
-I might add a command that makes it query all documents on loading, however, that will increase exponentially a lot more the time it takes for loading the documents.
+The reason for it to take a while, it's because it has to cut all documents into smaller sections and use the embedding model for each.  
+I might add a command that makes it query all documents on loading, however, that will increase exponentially a lot more the time it takes to laod the documents.  
+Btw, most of it was designed to work on CPU and "weak" machines.  
+For reference, on a weak laptop it took 10 minutes to query a very extremely dense research paper of 30 pages.  
+The second time it required the same document, it answered in less than a minute.
 
 ## A small Demo of what it can do
 It was provided with a PDF file about KG and LLMs among other channels with different documents.  
