@@ -9,11 +9,9 @@ from tqdm import tqdm
 from sentence_transformers import SentenceTransformer
 
 class VDB():
-    def __init__(self, char_doc_size: int = 10000):
+    def __init__(self):
 
         print("[ VDC ] Loading VDB...")
-
-        self.context = char_doc_size
 
         print("[ VDB ] Loading model for embedding...")
 

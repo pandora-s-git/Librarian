@@ -24,7 +24,7 @@ if not BOT_TOKEN:
 qa_channel_id = None
 info_channels = []
 
-prefix = "lib!"
+prefix = "tot!"
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=prefix, intents=intents)
@@ -32,7 +32,9 @@ tree = bot.tree
 
 rag_lib = "../Library"
 
-rag = RAG(rag_lib, 4000)
+lang = "fr"
+
+rag = RAG(rag_lib, 4000, lang)
 
 @bot.event
 async def on_ready():
@@ -44,7 +46,7 @@ async def ping(ctx):
     await ctx.send(response)
 
 @bot.command()
-@has_permissions(administrator=True)
+##@has_permissions(administrator=True)
 async def set_qa(ctx, qa_channel: discord.TextChannel, *info_channels_l):
     global qa_channel_id
     qa_channel_id = int(qa_channel.id)
@@ -53,6 +55,7 @@ async def set_qa(ctx, qa_channel: discord.TextChannel, *info_channels_l):
     await ctx.send("```QA Channel & Info Channels set.```")
 
 @bot.command()
+##@has_permissions(administrator=True)
 async def load(ctx):
     if qa_channel_id == None or len(info_channels) == 0:
         m = await ctx.reply("```First set the QA Channel and the Info Channels...```")
