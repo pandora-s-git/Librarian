@@ -16,8 +16,10 @@ class RAG():
         self.sum = SUM()
         if lang == "en":
             self.llm = LLM("<s>[INST] Here is a list of documents to use to answer a question:\n{}\nUsing these documents, answer the following question clearly and briefly, a summary. Question you need to answer:\n{} [/INST] {}")
+            self.pre = "Here is the answer:\n"
         else:
             self.llm = LLM("<s>[INST] Voici une liste de documents à utiliser pour répondre à une question :\n{}\nEn utilisant ces documents, répondez clairement et brièvement à la question suivante, en résumant. Question à laquelle vous devez répondre :\n{} [/INST] {}")
+            self.pre = "Voici la réponse:\n"
         self.context = context_c_size
         self.library = library
 
@@ -126,7 +128,7 @@ class RAG():
         all_contents = contents_full+contents_summed
         prompt = "\n".join([d["document"].split("()")[0]+"\n"+d["content"] for d in all_contents[::-1]])
 
-        async for feed in self.llm.ask(prompt, question, "Here is the answer:\n"):
+        async for feed in self.llm.ask(prompt, question, self.pre):
             yield feed
 
         yield [d["document"] for d in all_contents]
