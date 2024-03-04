@@ -2,21 +2,12 @@ print("[ LLM ] Loading LLM requirements...")
 
 from huggingface_hub import InferenceClient
 
-HF_TOKEN = ""
-try: ## In case you want to save the tokens somewhere outside the repo, same for bot.py
-    with open("../KEYS/HF_TOKEN.txt", "r",encoding="utf-8") as f:
-        HF_TOKEN = f.read()
-except Exception as e:
-    print(e)
-if not HF_TOKEN:
-    HF_TOKEN = input("Insert your HuggingFace Token here:\n > ")
-
 class LLM():
-    def __init__(self, prompt_template: str):
+    def __init__(self, hf_token: str, prompt_template: str):
 
         print("[ LLM ] Loading LLM...")
 
-        self.inf = InferenceClient("mistralai/Mixtral-8x7B-Instruct-v0.1", token = HF_TOKEN)
+        self.inf = InferenceClient("mistralai/Mixtral-8x7B-Instruct-v0.1", token = hf_token)
         self.prompt_template = prompt_template
 
         print("[ LLM ] LLM loaded.")

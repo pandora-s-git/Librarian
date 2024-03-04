@@ -7,7 +7,7 @@ from ressources.sum import SUM
 from ressources.llm import LLM
 
 class RAG():
-    def __init__(self, library: str, context_c_size: int = 10000, lang: str = "en"):
+    def __init__(self, hf_token: str, library: str, context_c_size: int = 10000, lang: str = "en"):
         assert lang in ["en","fr"]
 
         print("[ RAG ] Loading RAG...")
@@ -15,10 +15,10 @@ class RAG():
         self.vdb = VDB()
         self.sum = SUM(lang=lang)
         if lang == "en":
-            self.llm = LLM("<s>[INST] Here is a list of documents to use to answer a question:\n{}\nUsing these documents, answer the following question clearly and briefly, a summary. Question you need to answer:\n{} [/INST] {}")
+            self.llm = LLM(hf_token, "<s>[INST] Here is a list of documents to use to answer a question:\n{}\nUsing these documents, answer the following question clearly and briefly, a summary. Question you need to answer:\n{} [/INST] {}")
             self.pre = "Here is the answer:\n"
         else:
-            self.llm = LLM("<s>[INST] Voici une liste de documents à utiliser pour répondre à une question :\n{}\nEn utilisant ces documents, répondez clairement et brièvement à la question suivante, en résumant. Question à laquelle vous devez répondre :\n{} [/INST] {}")
+            self.llm = LLM(hf_token, "<s>[INST] Voici une liste de documents à utiliser pour répondre à une question :\n{}\nEn utilisant ces documents, répondez clairement et brièvement à la question suivante, en résumant. Question à laquelle vous devez répondre :\n{} [/INST] {}")
             self.pre = "Voici la réponse:\n"
         self.context = context_c_size
         self.library = library

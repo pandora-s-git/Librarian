@@ -9,19 +9,24 @@ from tools.read_pdf import read_attach_pdf
 from tools.read_txt import read_attach_txt
 from ressources.rag import RAG
 
-BOT_TOKEN = ""
-try: ## In case you want to save the tokens somewhere outside the repo, same for llm.py
-    with open("../KEYS/BOT_TOKEN.txt", "r", encoding="utf-8") as f:
-        BOT_TOKEN = f.read()
-except Exception as e:
-    print(e)
-if not BOT_TOKEN:
-    BOT_TOKEN = input("Insert your Bot Token here:\n > ")
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config.cfg')
+
+BOT_TOKEN = config.get('TOKENS', 'bot_token')
+HF_TOKEN = config.get('TOKENS', 'hf_token')
+
+if BOT_TOKEN == "None":
+    BOT_TOKEN = input("No Bot Token detected on config, insert token here:\n > ")
+if HF_TOKEN == "None":
+    HF_TOKEN = input("No HF Token detected on config, insert token here:\n > ")
+
+lang = config.get('SETTINGS', 'lang')
+prefix = config.get('SETTINGS', 'prefix')
 
 qa_channel_id = None
 info_channels = []
-
-prefix = "lib!"
 
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=prefix, intents=intents)
@@ -30,9 +35,7 @@ tree = bot.tree
 
 rag_lib = "../Library"
 
-lang = "en"
-
-rag = RAG(rag_lib, 4000, lang)
+rag = RAG(HF_TOKEN, rag_lib, 4000, lang)
 
 @bot.event
 async def on_ready():
