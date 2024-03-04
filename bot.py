@@ -24,6 +24,8 @@ if HF_TOKEN == "None":
 
 lang = config.get('SETTINGS', 'lang')
 prefix = config.get('SETTINGS', 'prefix')
+max_docs = config.getint('SETTINGS', 'max_docs')
+char_size = config.getint('SETTINGS', 'section_char_size')
 
 qa_channel_id = None
 info_channels = []
@@ -35,7 +37,7 @@ tree = bot.tree
 
 rag_lib = "../Library"
 
-rag = RAG(HF_TOKEN, rag_lib, 4000, lang)
+rag = RAG(HF_TOKEN, rag_lib, char_size, lang)
 
 @bot.event
 async def on_ready():
@@ -222,7 +224,7 @@ async def on_message(message: discord.Message):
 
         ans = ""
         asking = False
-        async for feed in rag.ask(question, 6):
+        async for feed in rag.ask(question, max_docs):
             if asking:
                 if counter%10 == 0:
                     await m.edit(content=ans+f"\n`{pro[(counter//10)%len(pro)]}`")
