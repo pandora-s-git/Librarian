@@ -24,6 +24,9 @@ Once it's done, you can invite the bot to ur discord server:
 `https://discord.com/api/oauth2/authorize?client_id={bot_id}&permissions=0&scope=bot%20applications.commands`  
 To run the code, you can just open the project on VSCode (or another IDE) and run bot.py, then you insert the Access token from Hugging Face and the Bot Token available on the developers portal.
 
+### Config
+There is a config file where you can choose some stuff, like tokens, language, so on...
+
 ### Commands
 Once the bot is on, you must set the QA channel it will use to answer (he reacts with pings/mentions) and the info channels:  
 `lib!set_qa #qa_channel #info_channel_1 #info_channel_2 ...`  
